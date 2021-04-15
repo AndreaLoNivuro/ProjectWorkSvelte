@@ -1,0 +1,87 @@
+.grid-container {
+  display: grid;
+  /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.4fr 0.1fr 0.2fr 0.2fr 0.5fr 0.5fr 0.1fr; */
+  grid-template-columns: 5% 9% 9% 9% 9% 9% 9% 9% 9% 9% 9% 5%;
+  grid-template-rows: 16% 3% 13% 13% 25% 25% 5%;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". bottoni bottoni bottoni bottoni bottoni bottoni date date date date ."
+    ". . . . . . . . . . . ."
+    ". titoloEntrate titoloEntrate titoloEntrate titoloUscite titoloUscite titoloUscite . titoloRisparmio titoloRisparmio titoloRisparmio ."
+    ". importoEntrate importoEntrate importoEntrate ImportoUscite ImportoUscite ImportoUscite . importoRisparmio importoRisparmio importoRisparmio ."
+    ". graficoEntrate graficoEntrate graficoEntrate graficoUscite graficoUscite graficoUscite freccia graficoRisparmio graficoRisparmio graficoRisparmio ."
+    ". graficoEntrate graficoEntrate graficoEntrate graficoUscite graficoUscite graficoUscite . graficoRisparmio graficoRisparmio graficoRisparmio ."
+    ". graficoEntrate graficoEntrate graficoEntrate graficoUscite graficoUscite graficoUscite . . . . .";
+  max-height: 80vh;
+}
+
+.titoloEntrate { grid-area: titoloEntrate; }
+
+.titoloUscite { grid-area: titoloUscite; }
+
+.importoEntrate { grid-area: importoEntrate; }
+
+.ImportoUscite { grid-area: ImportoUscite; }
+
+.graficoEntrate { grid-area: graficoEntrate; }
+
+.graficoUscite { grid-area: graficoUscite; }
+
+.freccia { grid-area: freccia; }
+
+.importoRisparmio { grid-area: importoRisparmio; }
+
+.titoloRisparmio { grid-area: titoloRisparmio; }
+
+.date {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "inizio inizio fine fine"
+    "inputInizio inputInizio inputFine inputFine";
+  grid-area: date;
+}
+
+.inizio { grid-area: inizio; }
+
+.fine { grid-area: fine; }
+
+.inputInizio { grid-area: inputInizio; }
+
+.inputFine { grid-area: inputFine; }
+
+.bottoni {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "inserisci inserisci dettaglio dettaglio";
+  grid-area: bottoni;
+}
+
+.inserisci { grid-area: inserisci; }
+
+.dettaglio { grid-area: dettaglio; }
+
+.graficoRisparmio { grid-area: graficoRisparmio; padding-bottom: 50%;}
+
+.wrap-input3 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  border-bottom: 2px solid #adadad;
+  padding: 0;
+  height: 90%;
+}
+
+.input3 {
+  display: block;
+  width: 100%;
+  font-size: 15px;
+  color: #555555;
+  line-height: 1.2;
+}

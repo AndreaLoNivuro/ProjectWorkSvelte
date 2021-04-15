@@ -1,0 +1,61 @@
+.grid-container2 {
+    display: grid;
+    grid-template-columns: 65% 35%;
+    grid-template-rows: 15% 85%;
+    gap: 0px 0px;
+    grid-template-areas:
+      "button side"
+      "table side";
+  }
+  
+  .button { grid-area: button; }
+  
+  .side {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 15% 85%;
+    gap: 0px 0px;
+    grid-template-areas:
+      "date"
+      "chart";
+    grid-area: side;
+  }
+  
+  .chart { grid-area: chart; }
+  
+  .date {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+      "inizio fine"
+      "inputInizio inputFine";
+    grid-area: date;
+  }
+  
+  .inizio { grid-area: inizio; }
+  
+  .fine { grid-area: fine; }
+  
+  .inputInizio { grid-area: inputInizio; }
+  
+  .inputFine { grid-area: inputFine; }
+  
+  .table { grid-area: table; }
+  
+  .fixed { 
+    position:fixed;
+    right: 0;
+    width: 35%;
+}
+
+.tableWidth {
+    width: 65%;
+    padding-top: 10%;
+}
+
+h1 {
+    padding-top: 10%;
+}
+  
