@@ -1,5 +1,9 @@
 <script>
 	import Router from 'svelte-spa-router'
+	import { location } from 'svelte-spa-router'
+
+	export const url = $location;
+    console.log(url)
 
 	import './styleFile/app.css';
 
@@ -9,19 +13,25 @@
 	import Uscite from './uscite/Uscite.svelte';
 	import FormInput from './formInput/formInput.svelte';
 	import DettaglioEntrateUscite from './dettaglioEntrateUscite/DettaglioEntrateUscite.svelte';
+	import Login from './user/Login.svelte';
+	import Registra from './user/Registra.svelte';
 	
 	const routes = {
 		// Exact path
+		'/login': Login,
+		'/registrati': Registra,
 		'/': Home,
 		'/entrate': Entrate,
 		'/uscite': Uscite,
-		'/inserisci': FormInput,
+		// '/inserisci': FormInput,
+		'/inserisci/:id?': FormInput,
 		'/dettaglio': DettaglioEntrateUscite,
-
 	}
 
 </script>
-<nav><Menu></Menu></nav>
+{#if url != "/login" & url != "/registrati"}
+	<nav><Menu></Menu></nav>
+{/if}
 
 <main>
 	<Router {routes}/>

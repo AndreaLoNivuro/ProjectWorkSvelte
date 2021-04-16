@@ -1,4 +1,5 @@
 <script>
+    import { location } from 'svelte-spa-router'
     import { onMount } from 'svelte';
     import { link } from 'svelte-spa-router'
     import '../styleFile/forminput.css';
@@ -9,28 +10,41 @@
     const categorieUscite = dataApp.categorieUscite
     const tipiMovimento = dataApp.tipo
 
-    let amount = '';
-    let category = '';
-    let description = '';
-    let type = '';
-    let id_utente = '';
-    let date = '';
+    export const idUrl = $location.slice(11).toString();
+    console.log(idUrl)
+
+    let movement = {
+        id: '',
+        amount: '',
+        category: '',
+        description: '',
+        type: '',
+        id_utente: '',
+        date: '',
+    }
 
     import Api from '../Api.js';
 
-    function create() {
-        console.log(amount)
-        console.log(description)
-        console.log(type)
-        console.log(category)
-        console.log(id_utente)
-        const response = Api.post('/movement/create', {amount: amount, category: category, description: description, type: type.toLowerCase(), id_utente: id_utente, date: date})
-        console.log(response)
-    }  
+    if (idUrl != "") {
+        onMount(async () => {
+            const response = await Api.get('/movement/findAll')
+            for (let movimento of response.result) {
+                if (movimento.id == idUrl) {
+                    movement.id = movimento.id
+                    movement.amount = movimento.amount
+                    movement.category = movimento.category
+                    movement.description = movimento.description
+                    movement.type = movimento.type
+                    movement.id_utente = movimento.id_utente
+                    movement.date = movimento.date
+                }
+            }
+        });
+    }
 
-    // let movement = {amount: 15, category: {category}, description: "Ciao", type: "uscita", id_utente: "a.lonivuro@live.it"}
-    
-    
+    function create() {
+        Api.post('/movement/create', movement)
+    }
 
 </script>
 
@@ -41,31 +55,31 @@
         </div>
         <form class="contact2-form validate-form">
             <div class="wrap-input2 validate-input">
-                <input type='number' placeholder='Importo' class="input2" bind:value={amount}>
+                <input type='number' placeholder='Importo' class="input2" bind:value={movement.amount}>
             </div>
 
             <div class="wrap-input2 validate-input">
-                <input type='date' placeholder='Data' class="input2" bind:value={date}>
+                <input type='date' placeholder='Data' class="input2" bind:value={movement.date}>
             </div>
 
             <div class="wrap-input2 validate-input">
-                <select name="dropdown" class="input2" bind:value={type}>
+                <select name="dropdown" class="input2" bind:value={movement.type}>
                     <option value="" selected>Tipo</option>
                     {#each tipiMovimento as tipo}
-                        <option value={tipo}>{tipo}</option>
+                        <option value={tipo}>{tipo.toUpperCase()}</option>
                     {/each}
                 </select>
             </div>
 
-            {#if type != ""}
+            {#if movement.type != ""}
                 <div class="wrap-input2 validate-input">
-                    <select name="dropdown" class="input2" bind:value={category}>
+                    <select name="dropdown" class="input2" bind:value={movement.category}>
                         <option value="" selected>Categoria</option>
-                        {#if type == "Entrata"}
+                        {#if movement.type == "entrata"}
                             {#each categorieEntrate as categoria}
                                 <option value={categoria}>{categoria}</option>
                             {/each}
-                        {:else if type == "Uscita"}
+                        {:else if movement.type == "uscita"}
                             {#each categorieUscite as categoria}
                                 <option value={categoria}>{categoria}</option>
                             {/each}
@@ -75,7 +89,7 @@
             {/if}
 
             <div class="wrap-input2 validate-input">
-                <input type='textarea' placeholder='Descrizione' class="input2" bind:value={description}>
+                <input type='textarea' placeholder='Descrizione' class="input2" bind:value={movement.description}>
             </div>
 
             <table style="width: 100%;">
@@ -112,6 +126,7 @@
         </form>
     </div>
 </div>
+
 
 <!-- <form on:submit|preventDefault={create}>
     <div class="container">
