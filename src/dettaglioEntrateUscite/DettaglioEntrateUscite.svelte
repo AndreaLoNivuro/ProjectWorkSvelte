@@ -14,17 +14,12 @@
 
       rows = response.result
 	});
-
-  function deleteMovement(movimento) {
-    Api.post('/movement/delete', movimento)
-  }
 </script>
 <table>
     <tr>
         {#each columns as nome}
           <th scope="col">{ nome }</th>
         {/each}
-        <th></th>
         <th></th>
     </tr>
     {#each rows as movimento}
@@ -38,14 +33,6 @@
               <div class="radius-icon">
                 <a href="/inserisci/{movimento.id}" use:link class="btn btn-xs btn-info">
                   Modifica
-                </a>
-              </div>
-            </td>
-            <td>
-              <div class="radius-icon">
-                <!-- svelte-ignore a11y-missing-attribute -->
-                <a on:click={deleteMovement(movimento)} class="btn btn-xs btn-info">
-                  Elimina
                 </a>
               </div>
             </td>

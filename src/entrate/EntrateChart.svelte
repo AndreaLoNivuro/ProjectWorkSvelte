@@ -52,8 +52,8 @@
           "data": data
         }
 
-    
   
+    
     fcRoot(FusionCharts, Charts, FusionTheme);
   
     chartConfig = {
@@ -67,7 +67,7 @@
     });
 
 </script>
-  
+
 <div id="chart-container" >
     <SvelteFC {...chartConfig} />
 </div>

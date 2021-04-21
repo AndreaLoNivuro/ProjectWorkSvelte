@@ -146,7 +146,7 @@
 		display:table;
 		width:100%;
 		table-layout:fixed;
-	} */
+	} 
 	:global(th:nth-child(1), td:nth-child(1)) {
 		width: 15%;
 	}
@@ -158,5 +158,5 @@
 	}
     :global(th:nth-child(4), td:nth-child(4)) {
 		width: 15%;
-	}
+	}*/
 </style>

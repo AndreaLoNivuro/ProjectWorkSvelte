@@ -1,10 +1,13 @@
 <script>
-    import { location } from 'svelte-spa-router'
+    import Router from 'svelte-spa-router'
+    import { location, push } from 'svelte-spa-router'
     import { onMount } from 'svelte';
     import { link } from 'svelte-spa-router'
     import '../styleFile/forminput.css';
 
     import dataApp from '../data.js';
+    
+    import Api from '../Api.js';
 
     const categorieEntrate = dataApp.categorieEntrate
     const categorieUscite = dataApp.categorieUscite
@@ -22,8 +25,6 @@
         id_utente: '',
         date: '',
     }
-
-    import Api from '../Api.js';
 
     if (idUrl != "") {
         onMount(async () => {
@@ -44,6 +45,10 @@
 
     function create() {
         Api.post('/movement/create', movement)
+    }
+
+    function deleteMovement(movement) {
+        Api.post('/movement/delete', movement)
     }
 
 </script>
@@ -95,29 +100,28 @@
             <table style="width: 100%;">
                 <tr>
                     <td>
-                        <div class="container-contact2-form-btn">
-                            <div class="wrap-contact2-form-btn">
-                                <div class="radius-icon">
-                                    <a href="/" use:link class="btn btn-xs btn-info">
-                                        INDIETRO
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="radius-icon">
+                            <a href="/" use:link class="btn btn-xs btn-info">
+                                INDIETRO
+                            </a>
                         </div>
                     </td>
-                    <td>
-                        <div class="container-contact2-form-btn">
-                            <div class="wrap-contact2-form-btn">
-                                <!-- <div class="contact2-form-bgbtn"></div>
-                                <button class="contact2-form-btn" type="submit">
-                                    AGGIUNGI
-                                </button> -->
-                                <div class="radius-icon">
-                                    <a href="/" use:link class="btn btn-xs btn-info" on:click={create}>
-                                        AGGIUNGI
-                                    </a>
-                                </div>
+                    {#if idUrl != ""}
+                        <td>
+                            <!-- href="/dettaglio" use:link -->
+                            <div class="radius-icon">
+                                <!-- svelte-ignore a11y-missing-attribute -->
+                                <a on:click={deleteMovement(movement),() => push("/dettaglio") } class="btn btn-xs btn-info">
+                                ELIMINA
+                                </a>
                             </div>
+                        </td>
+                    {/if}
+                    <td>
+                        <div class="radius-icon">
+                            <a href="/" use:link class="btn btn-xs btn-info" on:click={create}>
+                                AGGIUNGI
+                            </a>
                         </div>
                     </td>
                 </tr>
@@ -126,60 +130,3 @@
         </form>
     </div>
 </div>
-
-
-<!-- <form on:submit|preventDefault={create}>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="well well-sm">
-                    <form class="form-horizontal" method="post">
-                        <fieldset>
-                            <legend class="text-center header">Contact us</legend>
-
-                            <div class="form-group">
-                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-user bigicon"></i></span>
-                                <div class="col-md-8">
-                                    <input id="fname" name="name" type="text" placeholder="First Name" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-user bigicon"></i></span>
-                                <div class="col-md-8">
-                                    <input id="lname" name="name" type="text" placeholder="Last Name" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-envelope-o bigicon"></i></span>
-                                <div class="col-md-8">
-                                    <input id="email" name="email" type="text" placeholder="Email Address" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-phone-square bigicon"></i></span>
-                                <div class="col-md-8">
-                                    <input id="phone" name="phone" type="text" placeholder="Phone" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-pencil-square-o bigicon"></i></span>
-                                <div class="col-md-8">
-                                    <textarea class="form-control" id="message" name="message" placeholder="Enter your massage for us here. We will get back to you within 2 business days." rows="7"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-primary btn-lg">AGGIUNGI</button>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</form> -->
