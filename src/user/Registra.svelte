@@ -1,62 +1,75 @@
 <script>
     import { onMount } from 'svelte';
-    import { link } from 'svelte-spa-router'
+    import { link, push } from 'svelte-spa-router'
     import '../styleFile/user.css';
+    import Api from '../Api.js';
+
+    let allUser = []
+    let errorLogin = ''
+
+    let user = {
+        email: '',
+        name: '',
+        surname: '',
+        password: ''
+    }
+
+    onMount(async () => {
+        const response = await Api.get('/user/findAll')
+        allUser = response.result
+    });
+
+    function create() {
+        console.log(user)
+        for (let userDB of allUser) {
+            if (userDB.email == user.email) {
+                errorLogin = 'Email già esistente, se hai già un account, esegui il Login.'
+            }
+        }
+        if (errorLogin == '') {
+            Api.post('/user/create', user)
+            .then((response) => sessionStorage.setItem('user', response.result.email));
+        }
+    }
+
 </script>
 
 <div class="container-contact2">
     <div class="wrap-contact2">
         <div class="titolo">
-            Login
+            Registrazione
         </div>
         <form class="contact2-form validate-form">
-            <div class="wrap-input2 validate-input" data-validate="Name is required">
-                <input type='number' placeholder='Importo' class="input2">
+            <div class="wrap-input2 validate-input">
+                <input type='email' placeholder='email' class="input2" bind:value={user.email}>
             </div>
 
-            <div class="wrap-input2 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                <input type='text' placeholder='NAME' class="input2">
+            <div class="wrap-input2 validate-input" >
+                <input type='text' placeholder='Nome' class="input2" bind:value={user.name}>
             </div>
 
-            <div class="wrap-input2 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                <input type='text' placeholder='SURNAME' class="input2">
+            <div class="wrap-input2 validate-input">
+                <input type='text' placeholder='Cognome' class="input2" bind:value={user.surname}>
             </div>
 
-            <div class="wrap-input2 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                <input type='password' placeholder='PASSWORD' class="input2">
+            <div class="wrap-input2 validate-input">
+                <input type='password' placeholder='Password' class="input2" bind:value={user.password}>
             </div>
 
-            <table style="width: 100%;">
-                <tr>
-                    <td>
-                        <div class="container-contact2-form-btn">
-                            <div class="wrap-contact2-form-btn">
-                                <div class="radius-icon">
-                                    <a href="/" class="btn btn-xs btn-info">
-                                        INDIETRO
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="container-contact2-form-btn">
-                            <div class="wrap-contact2-form-btn">
-                                <!-- <div class="contact2-form-bgbtn"></div>
-                                <button class="contact2-form-btn" type="submit">
-                                    AGGIUNGI
-                                </button> -->
-                                <div class="radius-icon">
-                                    <a href="/inserisci" class="btn btn-xs btn-info">
-                                        AGGIUNGI
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-
+            <div class="radius-icon">
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a on:click={create}  class="btn btn-xs btn-info">
+                    REGISTRATI
+                </a>
+            </div>
         </form>
+        <!-- href="/" use:link -->
+        <p>{errorLogin}</p>
+        <h2>Hai già un profilo?</h2>
+        <div class="radius-icon">
+            <a href="/login" use:link class="btn btn-xs btn-info">
+                LOGIN
+            </a>
+        </div>
     </div>
 </div>

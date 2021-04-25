@@ -111,7 +111,7 @@
                             <!-- href="/dettaglio" use:link -->
                             <div class="radius-icon">
                                 <!-- svelte-ignore a11y-missing-attribute -->
-                                <a on:click={deleteMovement(movement),() => push("/dettaglio") } class="btn btn-xs btn-info">
+                                <a on:click={deleteMovement(movement), () => push("/dettaglio") } class="btn btn-xs btn-info">
                                 ELIMINA
                                 </a>
                             </div>
@@ -119,7 +119,8 @@
                     {/if}
                     <td>
                         <div class="radius-icon">
-                            <a href="/" use:link class="btn btn-xs btn-info" on:click={create}>
+                            <!-- svelte-ignore a11y-missing-attribute -->
+                            <a class="btn btn-xs btn-info" href="/" use:link on:click={create}>
                                 AGGIUNGI
                             </a>
                         </div>
