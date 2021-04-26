@@ -1,8 +1,11 @@
 <script>
 	import Router from 'svelte-spa-router'
-	import { location } from 'svelte-spa-router'
+	import { location, replace } from 'svelte-spa-router'
+	import { wrap } from 'svelte-spa-router/wrap'
+	import { afterUpdate } from 'svelte';
 
-	export const url = $location;
+	let url
+	url = $location;
     console.log(url)
 
 	import './styleFile/app.css';
@@ -18,15 +21,68 @@
 	
 	const routes = {
 		// Exact path
-		'/login': Login,
+		// '/login': Login,
+		'/login': wrap({
+			component: Login,
+			guards: [userIsLogged()],
+		}),
 		'/registrati': Registra,
-		'/': Home,
+		// '/': Home,
 		'/entrate': Entrate,
 		'/uscite': Uscite,
 		// '/inserisci': FormInput,
 		'/inserisci/:id?': FormInput,
 		'/dettaglio': DettaglioEntrateUscite,
+		'/': wrap({
+			component: Home,
+			guards: [userIsNotLogged()],
+            redirect: '/login'
+		})
 	}
+
+	function userIsNotLogged() {
+		if (sessionStorage.getItem('user') != null) {
+			console.log("ok")
+			return true
+		}
+		console.log("not ok")
+		replace('/login')
+		return false
+	}
+
+	function userIsLogged() {
+		if (sessionStorage.getItem('user') == null) {
+			return true
+		}
+		return false
+	}
+
+	afterUpdate(() => {
+		console.log('the component just updated');
+		url = $location;
+    	console.log(url)
+	});
+
+	// const routes = [
+	// 	{
+	// 		name: '/',
+	// 		component: Home,
+	// 		onlyIf: { guard: userIsLogged, redirect: '/login' },
+	// 	},
+	// 	{ 
+	// 		name: 'login',
+	// 		component: Login 
+	// 	},
+	// 	{ 
+	// 		name: '/registrati',
+	// 		component: Registra 
+	// 	},
+	// 	{
+	// 		name: 'entrate',
+	// 		component: Entrate,
+	// 		onlyIf: { guard: userIsLogged, redirect: '/login' },
+	// 	},
+	// 	]
 
 </script>
 {#if url != "/login" & url != "/registrati"}
@@ -36,34 +92,3 @@
 <main>
 	<Router {routes}/>
 </main>
-
-<!-- <style>
-	body {
-		padding: 0;
-	}
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin-top: 15%;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-
-	nav {
-		position: fixed;
-		width: 100%;
-	}
-</style> -->

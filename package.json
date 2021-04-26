@@ -22,6 +22,7 @@
     "fusioncharts": "^3.16.0",
     "sirv-cli": "^1.0.0",
     "svelte-fusioncharts": "^1.0.0",
+    "svelte-guard-history-router": "^4.2.7",
     "svelte-material-icons": "^1.0.3",
     "svelte-spa-router": "^3.1.0",
     "svelte-table": "^0.1.17"
