@@ -26,7 +26,10 @@
         for (let userDB of allUser) {
             if (userDB.email == user.email) {
                 if (userDB.password == user.password){
-                    sessionStorage.setItem('user', user.email);
+                    sessionStorage.setItem('user', userDB.email);
+                    sessionStorage.setItem('name', userDB.name);
+                    sessionStorage.setItem('surname', userDB.surname);
+                    sessionStorage.setItem('imageProfile', userDB.imageProfile);
                     replace('/')
                 } else {
                     errorLogin = 'Password errata.'

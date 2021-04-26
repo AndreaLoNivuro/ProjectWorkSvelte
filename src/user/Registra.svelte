@@ -3,15 +3,21 @@
     import { link, push } from 'svelte-spa-router'
     import '../styleFile/user.css';
     import Api from '../Api.js';
+    import dataApp from '../data.js';
 
     let allUser = []
     let errorLogin = ''
+
+    const avatars = dataApp.profileImage
+
+    let avatarSelected = ''
 
     let user = {
         email: '',
         name: '',
         surname: '',
-        password: ''
+        password: '',
+        imageProfile: ''
     }
 
     onMount(async () => {
@@ -28,7 +34,11 @@
         }
         if (errorLogin == '') {
             Api.post('/user/create', user)
-            .then((response) => sessionStorage.setItem('user', response.result.email));
+            .then((response) => 
+                sessionStorage.setItem('user', response.result.email),
+                sessionStorage.setItem('name', response.result.name),
+                sessionStorage.setItem('surname', response.result.surname));
+                sessionStorage.setItem('imageProfile', response.result.imageProfile);
         }
     }
 
@@ -39,6 +49,21 @@
         <div class="titolo">
             Registrazione
         </div>
+
+        {#each avatars as avatar}
+        <!-- <div>
+            <button
+                    on:click={() => (avatarSelected = avatar), console.log(avatarSelected)}
+                    style="border-radius:50%;width:100px;height:100px; float:left;text-decoration: none;border: none;outline:0"
+                />
+        </div> -->
+        <div class="dot" on:click={() => (avatarSelected = avatar), console.log(avatarSelected)}>
+            <img src="{avatar}" alt="" >
+        </div>
+        <!-- background-image:url({avatar}); selected:{avatar}==={user.imageProfile} no-selected:{avatar}!={user.imageProfile} -->
+                
+        {/each}
+        
         <form class="contact2-form validate-form">
             <div class="wrap-input2 validate-input">
                 <input type='email' placeholder='email' class="input2" bind:value={user.email}>

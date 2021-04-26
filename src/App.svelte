@@ -15,6 +15,7 @@
 	import DettaglioEntrateUscite from './dettaglioEntrateUscite/DettaglioEntrateUscite.svelte';
 	import Login from './user/Login.svelte';
 	import Registra from './user/Registra.svelte';
+	import Profilo from './user/Profilo.svelte';
 
 
 	let url
@@ -63,6 +64,11 @@
 		}),
 		'/dettaglio': wrap({
 			component: DettaglioEntrateUscite,
+			guards: [userIsNotLogged()],
+            redirect: '/login'
+		}),
+		'/profilo': wrap({
+			component: Profilo,
 			guards: [userIsNotLogged()],
             redirect: '/login'
 		}),

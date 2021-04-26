@@ -1,3 +1,43 @@
+.dot {
+  height: 100px;
+  width: 100px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 5px;
+}
+
+.dot .selected {
+  border: 1px solid red;
+  border-radius: 75px;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  color: red;
+  /* margin: 15px 5px; */
+}
+.dot .no-selected {
+  border:  1px solid #ADADAD;
+  border-radius: 75px;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  color: #ADADAD;
+  /* margin: 15px 5px;
+  margin-top: 20px; */
+}
+
+.dot img {
+  height: 100px;
+  width: 100px;
+}
+
+.dot :hover {
+  border: 1px solid red;
+  color: red;
+  cursor: pointer;
+}
+
 .header {
     color: #36A0FF;
     font-size: 27px;
