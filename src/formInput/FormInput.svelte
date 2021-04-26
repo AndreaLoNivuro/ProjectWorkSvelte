@@ -22,9 +22,10 @@
         category: '',
         description: '',
         type: '',
-        id_utente: '',
+        idUtente: sessionStorage.getItem('user'),
         date: '',
     }
+    
 
     if (idUrl != "") {
         onMount(async () => {
@@ -36,7 +37,7 @@
                     movement.category = movimento.category
                     movement.description = movimento.description
                     movement.type = movimento.type
-                    movement.id_utente = movimento.id_utente
+                    movement.idUtente = movimento.idUtente
                     movement.date = movimento.date
                 }
             }
@@ -44,6 +45,7 @@
     }
 
     function create() {
+        console.log(movement)
         Api.post('/movement/create', movement)
     }
 

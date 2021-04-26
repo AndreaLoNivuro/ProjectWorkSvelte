@@ -6,13 +6,25 @@
 
   import Api from '../Api.js';
 
+  let dataInizioString;
+	let dataFineString;
+
   let rows = []
   let columns = ["Tipo", "Importo", "Categoria", "Descrizione", "Data"]
 
   onMount(async () => {
-  const response = await Api.get('/movement/findAll')
+    dataInizioString = sessionStorage.getItem('dataInizio');
+	  dataFineString = sessionStorage.getItem('dataFine');
 
-      rows = response.result
+    const response = await Api.get('/movement/findAll')
+
+    rows = response.result.filter(movimento => {
+        if (movimento.idUtente == sessionStorage.getItem('user')) {
+          if (movimento.date >= dataInizioString & movimento.date <= dataFineString) {
+            return movimento
+          }
+        }
+      })
 	});
 </script>
 <table>

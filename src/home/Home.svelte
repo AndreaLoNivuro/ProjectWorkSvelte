@@ -1,5 +1,6 @@
 <script>
 	import { link } from 'svelte-spa-router'
+	import { afterUpdate } from 'svelte';
 
 	import EntrateChart from '../entrate/EntrateChart.svelte';
 	import UsciteChart from '../uscite/UsciteChart.svelte';
@@ -9,6 +10,9 @@
 	import Api from '../Api.js';
 
 	import '../styleFile/home.css';
+
+	let dataInizioString;
+	let dataFineString;
 
 	export let size = "5em";
 	export let width = size;
@@ -20,15 +24,29 @@
 	let totUscite = 0;
 
 	onMount(async () => {
+		dataInizioString = sessionStorage.getItem('dataInizio');
+		dataFineString = sessionStorage.getItem('dataFine');
+
 		const response = await Api.get('/movement/findAll')
 		
 		response.result.filter(movimento => {
-            if (movimento.type === "entrata") {
-                totEntrate += movimento.amount;
-            } else if (movimento.type === "uscita") {
-				totUscite += movimento.amount;
+			if (movimento.idUtente == sessionStorage.getItem('user')) {
+				if (movimento.date >= dataInizioString & movimento.date <= dataFineString) {
+					if (movimento.type === "entrata") {
+						totEntrate += movimento.amount;
+					} else if (movimento.type === "uscita") {
+						totUscite += movimento.amount;
+					}
+				}
 			}
         })
+	});
+
+	afterUpdate(() => {
+		console.log(dataFineString);
+		sessionStorage.setItem('dataFine', dataFineString);
+		console.log(dataInizioString);
+		sessionStorage.setItem('dataInizio', dataInizioString);
 	});
 </script>
 
@@ -42,10 +60,10 @@
 			Data fine
 		</div>
 		<div class="inputInizio wrap-input3">
-			<input type="date" class="input3">
+			<input type="date" class="input3" bind:value={dataInizioString}>
 		</div>
 		<div class="inputFine wrap-input3">
-		<input type="date" class="input3">
+			<input type="date" class="input3" bind:value={dataFineString}>
 		</div>
 	</div>
 	<div class="bottoni">
@@ -76,7 +94,7 @@
 	<div class="ImportoUscite titolo">
 		{ totUscite } €
 	</div>
-	<div class="graficoEntrate">
+	<div class="graficoEntrate" id="chart1">
 		<EntrateChart></EntrateChart>
 	</div>
 	<div class="graficoUscite">
@@ -92,6 +110,7 @@
 		{ totEntrate - totUscite } €
 	</div>
 	<div class="graficoRisparmio">
+		<img class="maialino" src="images/risparmio.png" alt="">
 		<RisparmioChart></RisparmioChart>
 	</div>
 </div>

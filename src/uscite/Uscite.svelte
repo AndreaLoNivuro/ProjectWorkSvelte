@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import SvelteTable from "svelte-table";
     import UsciteChart from "./UsciteChart.svelte";
+    import { afterUpdate } from 'svelte';
 
     import {link} from 'svelte-spa-router'
 
@@ -9,97 +10,36 @@
 
     import Api from '../Api.js';
 
+    let dataInizioString;
+	let dataFineString;
+
     let rows = []
-    let columns = []
+    let columns = ["Tipo", "Importo", "Categoria", "Descrizione", "Data"]
 
     onMount(async () => {
+        dataInizioString = sessionStorage.getItem('dataInizio');
+	    dataFineString = sessionStorage.getItem('dataFine');
+
 		const response = await Api.get('/movement/findAll')
 
-        rows = response.result.filter(row => {
-            if (row.type === "uscita") {
-                return row
+        rows = response.result.filter(movimento => {
+          if (movimento.idUtente == sessionStorage.getItem('user')) {
+            if (movimento.type === "uscita") {
+              if (movimento.date >= dataInizioString & movimento.date <= dataFineString) {
+                return movimento
+              }
             }
+          }
         })
-
-        columns = [
-            {
-                key: "amount",
-                title: "Importo",
-                value: v => v.amount,
-                sortable: true,
-                filterOptions: rows => {
-                // generate groupings of 0-10, 10-20 etc...
-                let nums = {};
-                rows.forEach(row => {
-                    let num = Math.floor(row.amount / 10);
-                    if (nums[num] === undefined)
-                    nums[num] = { name: `${num * 10} to ${(num + 1) * 10}`, value: num };
-                });
-                // fix order
-                nums = Object.entries(nums)
-                    .sort()
-                    .reduce((o, [k, v]) => ((o[k] = v), o), {});
-                return Object.values(nums);
-                },
-                filterValue: v => Math.floor(v.amount / 10),
-                headerClass: "text-left"
-            },
-            {
-                key: "category",
-                title: "Categoria",
-                value: v => v.category,
-                sortable: true,
-                filterOptions: rows => {
-                // use first letter of first_name to generate filter
-                let letrs = {};
-                rows.forEach(row => {
-                    let letr = row.category.charAt(0);
-                    if (letrs[letr] === undefined)
-                    letrs[letr] = {
-                        name: `${letr.toUpperCase()}`,
-                        value: letr.toLowerCase()
-                    };
-                });
-                // fix order
-                letrs = Object.entries(letrs)
-                    .sort()
-                    .reduce((o, [k, v]) => ((o[k] = v), o), {});
-                return Object.values(letrs);
-                },
-                filterValue: v => v.category.charAt(0).toLowerCase()
-            },
-            {
-                key: "description",
-                title: "Descrizione",
-                value: v => v.description,
-                sortable: true,
-                filterOptions: rows => {
-                // use first letter of last_name to generate filter
-                let letrs = {};
-                rows.forEach(row => {
-                    let letr = row.description.charAt(0);
-                    if (letrs[letr] === undefined)
-                    letrs[letr] = {
-                        name: `${letr.toUpperCase()}`,
-                        value: letr.toLowerCase()
-                    };
-                });
-                // fix order
-                letrs = Object.entries(letrs)
-                    .sort()
-                    .reduce((o, [k, v]) => ((o[k] = v), o), {});
-                return Object.values(letrs);
-                },
-                filterValue: v => v.description.charAt(0).toLowerCase()
-            },
-            {
-                key: "date",
-                title: "Data",
-                value: v => v.date,
-                sortable: true,
-            }
-        ];
     });
+
+    afterUpdate(() => {
+		console.log(dataFineString);
+		sessionStorage.setItem('dataFine', dataFineString);
+        // EntrateChart.caller()
+		console.log(dataInizioString);
+		sessionStorage.setItem('dataInizio', dataInizioString);
+	});
 </script>
 
 <div class="grid-container2">
@@ -113,25 +53,47 @@
     </div>
     <div class="side fixed">
       <div class="chart titolo">
-        <br>Uscite
         <UsciteChart></UsciteChart>
       </div>
       <div class="date">
-        <div class="inizio">
+        <div class="inizio titolo2">
             Data inizio
         </div>
-        <div class="fine">
+        <div class="fine titolo2">
             Data fine
         </div>
-        <div class="inputInizio">
-            <input type="date">
+        <div class="inputInizio wrapinput6">
+            <input type="date" class="input6" bind:value={dataInizioString}>
         </div>
-        <div class="inputFine">
-            <input type="date">
+        <div class="inputFine wrapinput6">
+            <input type="date" class="input6" bind:value={dataFineString}>
         </div>
       </div>
     </div>
     <div class="table tableWidth">
-        <SvelteTable columns="{columns}" rows="{rows}"></SvelteTable>
+        <table>
+            <tr>
+                {#each columns as nome}
+                  <th scope="col">{ nome }</th>
+                {/each}
+                <th></th>
+            </tr>
+            {#each rows as movimento}
+                <tr>
+                    <td>{ movimento.type }</td>
+                    <td>{ movimento.amount }</td>
+                    <td>{ movimento.category }</td>
+                    <td>{ movimento.description }</td>
+                    <td>{ movimento.date }</td>
+                    <td>
+                      <div class="radius-icon">
+                        <a href="/inserisci/{movimento.id}" use:link class="btn btn-xs btn-info">
+                          Modifica
+                        </a>
+                      </div>
+                    </td>
+                </tr>
+            {/each}
+        </table>
     </div>
   </div>

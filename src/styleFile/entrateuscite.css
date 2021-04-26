@@ -13,7 +13,7 @@
   .side {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 15% 85%;
+    grid-template-rows: 20% 70%;
     gap: 0px 0px;
     grid-template-areas:
       "date"
@@ -51,7 +51,7 @@
 }
 
 .tableWidth {
-    width: 65%;
+    width: 75%;
     padding-top: 10%;
 }
 
@@ -59,3 +59,19 @@ h1 {
     padding-top: 10%;
 }
 
+.wrapinput6 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  border-bottom: 2px solid #adadad;
+  padding: 0;
+  height: 90%;
+}
+
+.input6 {
+  display: block;
+  width: 100%;
+  font-size: 15px;
+  color: #555555;
+  line-height: 1.2;
+}

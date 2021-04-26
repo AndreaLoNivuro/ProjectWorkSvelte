@@ -11,17 +11,27 @@
   
   let chartConfig
   let dataSource
+
+  let dataInizioString;
+	let dataFineString;
   
   let uscite = []
   let data = []
 
   onMount(async () => {
+      dataInizioString = sessionStorage.getItem('dataInizio');
+	    dataFineString = sessionStorage.getItem('dataFine');
+
       const response = await Api.get('/movement/findAll')
 
       uscite = response.result.filter(movimento => {
+        if (movimento.idUtente == sessionStorage.getItem('user')) {
           if (movimento.type === "uscita") {
+            if (movimento.date >= dataInizioString & movimento.date <= dataFineString) {
               return movimento
+            }
           }
+        }
       })
 
       for (let categoria of dataApp.categorieUscite) {
