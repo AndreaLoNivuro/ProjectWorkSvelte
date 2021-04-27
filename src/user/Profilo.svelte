@@ -7,7 +7,7 @@
     let imageProfile = sessionStorage.getItem('imageProfile')
 </script>
 
-<h2 style="text-align:center">User Profile Card</h2>
+<!-- <h2 style="text-align:center">User Profile Card</h2> -->
 
 <div class="card">
   <img src="{imageProfile}" alt="{name} {surname}" style="width:100%">
@@ -15,5 +15,5 @@
   <p>Email</p>
   <p class="titleProfile">{email}</p>
   
-  <p><button class="buttonProfile">Contact</button></p>
+  <!-- <p><button class="buttonProfile">Contact</button></p> -->
 </div>
