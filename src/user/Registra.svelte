@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
-    import { link, push } from 'svelte-spa-router'
+    import { link, push, replace } from 'svelte-spa-router'
+    import { afterUpdate } from 'svelte';
     import '../styleFile/user.css';
     import Api from '../Api.js';
     import dataApp from '../data.js';
@@ -12,7 +13,7 @@
 
     let avatarSelected = ''
 
-    let user = {
+    $: user = {
         email: '',
         name: '',
         surname: '',
@@ -34,13 +35,24 @@
         }
         if (errorLogin == '') {
             Api.post('/user/create', user)
-            .then((response) => 
+            .then((response) => {
                 sessionStorage.setItem('user', response.result.email),
                 sessionStorage.setItem('name', response.result.name),
-                sessionStorage.setItem('surname', response.result.surname));
-                sessionStorage.setItem('imageProfile', response.result.imageProfile);
+                sessionStorage.setItem('surname', response.result.surname),
+                sessionStorage.setItem('imageProfile', response.result.imageProfile)})
+
+                replace('/')
         }
     }
+
+    function assegna(avatar) {
+        avatarSelected = avatar
+        console.log(avatarSelected)
+    }
+
+    afterUpdate(() => {
+		user.imageProfile = avatarSelected
+	});
 
 </script>
 
@@ -57,7 +69,7 @@
                     style="border-radius:50%;width:100px;height:100px; float:left;text-decoration: none;border: none;outline:0"
                 />
         </div> -->
-        <div class="dot" on:click={() => (avatarSelected = avatar), console.log(avatarSelected)}>
+        <div class="{avatarSelected === avatar ? 'dot selected' : 'dot no-selected'}" on:click={() => assegna(avatar)}>
             <img src="{avatar}" alt="" >
         </div>
         <!-- background-image:url({avatar}); selected:{avatar}==={user.imageProfile} no-selected:{avatar}!={user.imageProfile} -->
