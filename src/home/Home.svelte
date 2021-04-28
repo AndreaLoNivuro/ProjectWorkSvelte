@@ -43,9 +43,7 @@
 	});
 
 	afterUpdate(() => {
-		console.log(dataFineString);
 		sessionStorage.setItem('dataFine', dataFineString);
-		console.log(dataInizioString);
 		sessionStorage.setItem('dataInizio', dataInizioString);
 	});
 </script>

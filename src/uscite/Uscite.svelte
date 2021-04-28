@@ -34,12 +34,9 @@
     });
 
     afterUpdate(() => {
-		console.log(dataFineString);
-		sessionStorage.setItem('dataFine', dataFineString);
-        // EntrateChart.caller()
-		console.log(dataInizioString);
-		sessionStorage.setItem('dataInizio', dataInizioString);
-	});
+      sessionStorage.setItem('dataFine', dataFineString);
+      sessionStorage.setItem('dataInizio', dataInizioString);
+    });
 </script>
 
 <div class="grid-container2">
